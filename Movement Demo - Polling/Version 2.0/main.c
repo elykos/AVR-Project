@@ -23,8 +23,6 @@
 
 
 
-
-
 int main(void)
 {
 	char Data_in;				// Variable that stores the received data
@@ -52,44 +50,40 @@ int main(void)
 		 */
 		
 		Data_in = USART_RxChar();							// Receive data 
+		
 		if(Data_in == 0xff && delayFlag==0)
 		{
 			if(count%4==0)
 			{
-				moveForward();
-				USART_SendString("ON");	
+				moveForward();	
 			}
 			else if(count%4==1)
 			{
-				moveReverse();
-				USART_SendString("ON");	
+				moveReverse();	
 			}
 			else if(count%4==2)
 			{
 				sharpRight();
-				USART_SendString("ON");	
 			}
 			else if(count%4==3)
 			{
-				sharpLeft();
-				USART_SendString("ON");	
+				sharpLeft();		
 			}
 			
 			count ++;
 			
 			delayFlag=1;
 			
-			//USART_SendString("ON");							
+										
 			
 		}
 		else if(Data_in ==0x00 && delayFlag==1)
 		{
-			PORTB = 0x00;							       //Reset ports
-			USART_SendString("OFF"); 				
+			PORTB = 0x00;							       //Reset ports 				
 			delayFlag = 0;
 		}
 		else
-			USART_SendString("Unknown command");	    
+			UDR = 0x00;										
 		
 		
 	}		
