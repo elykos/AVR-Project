@@ -83,7 +83,7 @@ int main(void)
 			delayFlag = 0;
 		}
 		else
-			UDR = 0x00;										
+			UDR = 0x00;						          //Flush UDR register				
 		
 		
 	}		
