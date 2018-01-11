@@ -23,17 +23,21 @@
 #include "UART.c"
 
 
-volatile int count=0;
 volatile int delayFlag=0;
 
 volatile int arriveFlag=0;
 volatile char ReceivedByte;
 
-
+/*
+ * Interrupt Service routine that handles
+ * the incoming data and sets the global flag
+ * alowing the main loop to set the correct
+ * command on the car 
+ */
 ISR(USART_RXC_vect)
 {
-	ReceivedByte = UDR;
-	arriveFlag = 1;
+	ReceivedByte = UDR;	//Store UDR data
+	arriveFlag = 1;		//Set global flag
 }
 
 
@@ -44,12 +48,12 @@ int main(void)
 	DDRD &= ~(1<<PIND0);		// Set PORTD0 as input
 	PORTD |= (1<<PIND0);		// Enable pull-up resistor for PORTD2
         DDRB = 0xff;				// Set entire PORTB as outputs			
-	USART_Init(4800);			// Init UART as 9600 baud rate			
+	USART_Init(4800);			// Init UART at 4800(x2) baud rate			
 	PORTB = 0x00;				// Clear PORTB outputs
 	
 	OSCCAL = 0xB5;				// Set oscillator calibration value
 	
-	sei();						// Enable global interrupts
+	sei();					// Enable global interrupts
 	
 	
 	while(1)
@@ -63,39 +67,39 @@ int main(void)
 				arriveFlag = 0;
 			}
 			
-			else if(ReceivedByte==0x07)  //Left
+			else if(ReceivedByte==0x07)  	  //Left
 			{
 				sharpLeft();
 				arriveFlag = 0;
 			}
 			
-			else if(ReceivedByte==0x03)  //Right
+			else if(ReceivedByte==0x03)       //Right
 			{
 				sharpRight();
 				arriveFlag = 0;
 			}
 			
-			else if(ReceivedByte==0x01)  //Forward
+			else if(ReceivedByte==0x01)       //Forward
 			{
 				moveForward();
 				arriveFlag = 0;
 			}
 			
-			else if(ReceivedByte==0x00)
+			else if(ReceivedByte==0x00)       //Pause movement
 			{
 				PORTB = 0x00;
 				arriveFlag = 0;
 			}
 			
-			else
+			else				   //Do nothing
 			{
-				PORTB = PORTB;
+				PORTB = PORTB;	
 				arriveFlag = 0;
 			}
 			
 		}
 		
-		UDR = 0x00;
+		UDR = 0x00;	//Clear UDR buffer
 	}		
 	return 0;
 	
