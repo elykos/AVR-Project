@@ -1,7 +1,7 @@
 /*
  * MyApp5.c
  *
- * Authors : Manolis Lykos, Argyriou Maria, Vardaxis Ioannis
+ * Authors : Manolis Lykos, Argyriou Maria
  *
  * This project demonstrates the communication between an 
  * Android device and an AVR MCU through Bluetooth module
@@ -54,43 +54,46 @@ int main(void)
 	
 	while(1)
 	{
-		
-		if(ReceivedByte==0x0f && arriveFlag==1)		  //Backwards
+		if(arriveFlag==1)
 		{
-			moveReverse();
-			arriveFlag = 0;
+			
+			if(ReceivedByte==0x0f)		  //Backwards
+			{
+				moveReverse();
+				arriveFlag = 0;
+			}
+			
+			else if(ReceivedByte==0x07)  //Left
+			{
+				sharpLeft();
+				arriveFlag = 0;
+			}
+			
+			else if(ReceivedByte==0x03)  //Right
+			{
+				sharpRight();
+				arriveFlag = 0;
+			}
+			
+			else if(ReceivedByte==0x01)  //Forward
+			{
+				moveForward();
+				arriveFlag = 0;
+			}
+			
+			else if(ReceivedByte==0x00)
+			{
+				PORTB = 0x00;
+				arriveFlag = 0;
+			}
+			
+			else
+			{
+				PORTB = PORTB;
+				arriveFlag = 0;
+			}
+			
 		}
-		
-		else if(ReceivedByte==0x07 && arriveFlag==1)  //Left
-		{
-			sharpLeft();
-			arriveFlag = 0;
-		}
-		
-		else if(ReceivedByte==0x03 && arriveFlag==1)  //Right
-		{
-			sharpRight();
-			arriveFlag = 0;
-		}
-		
-		else if(ReceivedByte==0x01 && arriveFlag==1)  //Forward
-		{
-			moveForward();
-			arriveFlag = 0;
-		}
-		
-		else if(ReceivedByte==0x00 && arriveFlag==1) //Do nothing
-		{
-			PORTB = 0x00;
-			arriveFlag = 0;
-		}
-		
-		else
-		{
-			PORTB = PORTB;	
-			arriveFlag = 0;
-		}
-		
 		
 		UDR = 0x00;
 	}		
