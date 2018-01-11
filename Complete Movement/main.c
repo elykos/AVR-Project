@@ -43,7 +43,7 @@ int main(void)
 	char Data_in;				// Variable that stores the received data
 	DDRD &= ~(1<<PIND0);		// Set PORTD0 as input
 	PORTD |= (1<<PIND0);		// Enable pull-up resistor for PORTD2
-    DDRB = 0xff;				// Set entire PORTB as outputs			
+        DDRB = 0xff;				// Set entire PORTB as outputs			
 	USART_Init(4800);			// Init UART as 9600 baud rate			
 	PORTB = 0x00;				// Clear PORTB outputs
 	
