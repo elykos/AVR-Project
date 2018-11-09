@@ -1,7 +1,7 @@
 /*
  * MyApp5.c
  *
- * Authors : Manolis Lykos, Argyriou Maria, Vardaxis Ioannis
+ * Authors : Manolis Lykos, Argyriou Maria
  *
  * This project demonstrates the communication between an 
  * Android device and an AVR MCU through Bluetooth module
